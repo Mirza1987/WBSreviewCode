@@ -1,0 +1,121 @@
+﻿@model IEnumerable<DigitArchive.Models.Company>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Firme</h2>
+
+<p>
+    <button class="btn btn-mini btn-primary" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Create", "Company")'"><i class="glyphicon glyphicon-plus"></i> Kreiraj novu</button>
+</p>
+    <input type="text" id="searchBar"/>
+    <button style='width: 100px' class='btn btn-mini btn-info' data-placement='top' rel='tooltip' onclick="SearchCompany()"><i class="glyphicon glyphicon-search"></i> Pretraži</button>
+
+
+<table class="table hidden" id="companyTable">
+    <thead>     
+    <tr> 
+        <th>
+        @Html.DisplayNameFor(model => model.CompanyName)
+        </th> 
+        <th>
+        @Html.DisplayNameFor(model => model.CompanyIdNumber)
+        </th>  
+        <th>
+        @Html.DisplayNameFor(model => model.CompanyTaxNumber)
+        </th>
+        <th>Akcije</th>  
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<table class="table" id="originalTable">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyIdNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyTaxNumber)
+        </th>
+        <th>Akcije</th>        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyIdNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyTaxNumber)
+        </td>
+        <td>
+            <p><button style='width: 100px' class='btn btn-mini btn-danger' data-placement='top' rel='tooltip' onclick="location.href='@Url.Action("Edit", "Company", new{@id=item.CompanyId} )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+            <p><button style='width: 100px' class='btn btn-mini btn-success' data-placement='top' rel='tooltip' onclick="location.href='@Url.Action("Details", "Company", new{@id=item.CompanyId} )'"><i class="glyphicon glyphicon-list"></i> Detalji</button></p>
+            <p><button style='width: 100px' class='btn btn-mini btn-default' data-placement='top' rel='tooltip' onclick="location.href='@Url.Action("Delete", "Company", new{@id=item.CompanyId} )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+        </td>      
+    </tr>
+}
+
+</table>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var searchBarEnterKey = document.getElementById("searchBar");
+        searchBarEnterKey.addEventListener("keydown", function (e) {
+            if (e.keyCode === 13) {
+                SearchCompany();
+            }
+        });
+
+    function SearchCompany() {
+
+        var textbox = document.getElementById("searchBar").value;
+        var data = encodeURIComponent(textbox);
+        var url = "/Company/SearchCompany";
+
+        $.ajax({
+
+            data: data,
+            url: url + "?searchTerm=" + data
+
+        }).success(function (response) {
+            console.log("success");
+            var table = $('#companyTable');
+            var tBody = table.children('tbody');
+            tBody.html("");
+            var textbox = document.getElementById("searchBar");
+            textbox.value = "";
+                tBody.append(
+                "<tr> <td>" + response.CompanyName + " </td><td>" +
+                            response.CompanyIdNumber + "</td><td>" +
+                            response.CompanyTaxNumber + "</td><td>" +
+               "<p><button style='width: 100px' class='btn btn-mini btn-danger' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Edit", "Company"))?id=" + response.CompanyId + "'\"> <i class='glyphicon glyphicon-edit'></i> Izmjeni</button></p>" +
+               "<p><button style='width: 100px' class='btn btn-mini btn-success' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Details", "Company"))?id=" + response.CompanyId + "'\"><i class='glyphicon glyphicon-list'></i> Detalji</button></p>" +
+               "<p><button style='width: 100px' class='btn btn-mini btn-default' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Delete", "Company"))?id=" + response.CompanyId + "'\"><i class='glyphicon glyphicon-trash'></i> Obriši</button></p>" +
+                               "</td></tr>"
+                    );
+                table.removeClass("hidden");
+                var originalTable = $('#originalTable');
+                originalTable.remove();
+        }).error(function (response) {
+            console.log("error");
+            console.log(response);
+            var textbox = document.getElementById("searchBar");
+            textbox.value = "";
+            alert("Nema firme sa traženim imenom.");
+        });
+    }
+</script>
+}

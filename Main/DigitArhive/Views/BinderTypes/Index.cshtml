@@ -1,0 +1,32 @@
+﻿@model IEnumerable<DigitArchive.Models.BinderType>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tipovi registratora</h2>
+
+<p>
+    <button class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Create", "BinderTypes" )'"><i class="glyphicon glyphicon-plus"></i> Dodaj novi</button>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BinderTypeName)
+        </th>
+        <th>Akcije</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BinderTypeName)
+        </td>
+        <td>
+            <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "BinderTypes", new{ id = item.BinderTypeId } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+            <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "BinderTypes", new { id = item.BinderTypeId } )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+        </td>
+    </tr>
+}
+
+</table>

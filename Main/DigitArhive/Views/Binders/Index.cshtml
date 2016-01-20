@@ -1,0 +1,64 @@
+﻿@model IEnumerable<DigitArchive.Models.Binder>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Registratori</h2>
+
+<p>
+    @Html.ActionLink("Dodaj novi registrator", "Create", "Binders")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BarCode)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company.CompanyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Year)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeStamp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BarCode)
+        </td>
+        <td>
+            <p><button style="width: 50px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Binders", new{@id=item.BinderId} )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+            <p><button style="width: 100px" class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Binders", new{@id=item.BinderId} )'"><i class="glyphicon glyphicon-list"></i> Detalji</button></p>
+            <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "Binders", new{@id=item.BinderId} )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>  
+        </td>
+    </tr>
+}
+
+</table>

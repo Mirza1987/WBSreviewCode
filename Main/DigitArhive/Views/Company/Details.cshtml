@@ -1,0 +1,182 @@
+﻿@model DigitArchive.Models.Company
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalji</h2>
+
+<p>
+    <button class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Company", new{@id= Model.CompanyId} )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button>
+    <button class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Index", "Company" )'"><i class="glyphicon glyphicon-arrow-left"></i> Nazad na listu</button>
+    <button class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Create", "Binders", new{@id=Model.CompanyId} )'"><i class="glyphicon glyphicon-plus"></i> Dodaj novi registrator</button>
+
+</p>
+
+
+<input type="text" id="searchBar" />
+<button style='width: 100px' class='btn btn-mini btn-info' data-placement='top' rel='tooltip' onclick="SearchCompany()"><i class="glyphicon glyphicon-search"></i> Pretraži</button>
+
+<body>
+    <div>
+        <h4>Firma</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CompanyName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CompanyName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CompanyIdNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CompanyIdNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CompanyTaxNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CompanyTaxNumber)
+            </dd>
+
+        </dl>
+
+
+        <h4>Registratori firme</h4>
+
+
+
+        <table class="table hidden" id="binderTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Bar kod")
+                    </th>
+                    <th>
+                        Opis
+                    </th>
+                    <th>
+                        @Html.DisplayName("Broj dokumenata")
+                    </th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        <table class="table" id="originalTable">
+            @if (Model.Binders.Count > 0)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayName("Bar kod")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Opis")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Broj dokumenata")
+                    </th>
+                    <th>Akcije</th>
+                </tr>
+
+                foreach (var binder in Model.Binders)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => binder.BarCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => binder.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => binder.Documents.Count)
+                        </td>
+                        <td>
+                            <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Binders", new { @id = binder.BinderId } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+                            <p><button style="width: 100px" class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Binders", new { @id = binder.BinderId } )'"><i class="glyphicon glyphicon-list"></i> Detalji</button></p>
+                            <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "Binders", new { @id = binder.BinderId } )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+                        </td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr><td>Firma nema otvorenih registratora</td></tr>
+            }
+
+        </table>
+    </div>
+</body>
+
+@section Scripts{
+    <script type="text/javascript">
+
+    var searchBarEnterKey = document.getElementById("searchBar");
+    searchBarEnterKey.addEventListener("keydown", function (e) {
+        if (e.keyCode === 13) {
+            SearchBinder();
+        }
+    });
+
+    function SearchBinder() {
+
+        var textbox = document.getElementById("searchBar").value;
+        var data = encodeURIComponent(textbox);
+        var url = "/Company/SearchBinder";
+        var companyId = @Model.CompanyId;
+
+            $.ajax({
+
+                method:"get",
+                data: data,
+                url: url + "?companyId=" + companyId +"&barCode="+ data
+
+            }).success(function (response) {
+                console.log(response);
+
+                var table = $('#binderTable');
+                var tBody = table.children('tbody');
+                tBody.html("");
+                var textbox = document.getElementById("searchBar");
+                textbox.value = "";
+
+                if(response.BarCode!=null){
+                    tBody.append(
+                "<tr><td>" +response.BarCode + "</td><td>" +
+                           response.Description + "</td><td>" +
+                           +response.Year + "</td><td>" +
+                           "<p><button style='width: 100px' class='btn btn-mini btn-danger' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Edit", "Binders"))?id=" + response.BinderId + "'\"> <i class='glyphicon glyphicon-edit'></i> Izmjeni</button></p>" +
+                           "<p><button style='width: 100px' class='btn btn-mini btn-success' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Details", "Binders"))?id=" + response.BinderId + "'\"><i class='glyphicon glyphicon-list'></i> Detalji</button></p>" +
+                           "<p><button style='width: 100px' class='btn btn-mini btn-default' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Delete", "Binders"))?id=" + response.BinderId + "'\"><i class='glyphicon glyphicon-trash'></i> Obriši</button></p>" +
+                           "</td></tr>"
+                );
+                    table.removeClass("hidden");
+                    var originalTable = $('#originalTable');
+                    originalTable.remove();
+                }
+                else{
+                    alert("Nema registratora sa traženim bar kodom.");
+                }
+
+            }).error(function (response) {
+                console.log("error");
+                console.log(response);
+                var textbox = document.getElementById("searchBar");
+                textbox.value = "";
+                alert("Nema registratora sa traženim bar kodom.");
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<DigitArchive.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Korisnici</h2>
+
+<p>
+    @Html.ActionLink("Dodaj novog korisnika", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Prezime")
+        </th>
+        <th>
+            @Html.DisplayName("Ime")
+        </th>
+        <th>
+            @Html.DisplayName("Email")
+        </th>    
+        <th>
+            Akcije
+        </th>    
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            
+            <td>
+                <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Account", new { @id = item.Id } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+                <p><button style="width: 100px" class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Account", new { @id = item.Id } )'"><i class="glyphicon glyphicon-list"></i> Detalji</button></p>
+                <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "Account", new { @id = item.Id } )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>                            
+            </td>
+        </tr>
+    }
+
+</table>

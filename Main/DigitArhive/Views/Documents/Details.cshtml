@@ -1,0 +1,124 @@
+﻿@model DigitArchive.Models.Document
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalji</h2>
+<p>
+    <button class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Documents", new { @id = Model.DocumentId } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button>
+    <button class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Binders", new { id = Model.BinderId } )'"><i class="glyphicon glyphicon-arrow-left"></i> Nazad na listu</button>
+</p>
+<body>
+    <div>
+        <h4>Dokument</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Binder.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Binder.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Company.CompanyName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Company.CompanyName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DocumentType.DocumentTypeName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DocumentDescription)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DocumentDescription)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TimeStamp)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TimeStamp)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DocumentCreationDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DocumentCreationDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CompanyFromDocument)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CompanyFromDocument)
+            </dd>
+        </dl>
+
+
+
+        
+
+        <table class="table">
+            @if (Model.Pages.Count > 0)
+            {
+                <tr>
+                    <th>
+
+                    </th>
+                    <th>
+                        Stranica
+                    </th>
+                    <th>
+                        Lokacija
+                    </th>
+                    <th>
+                        Akcije
+                    </th>
+                </tr>
+
+                int counter = 0;
+
+                foreach (var page in Model.Pages)
+                {
+                    counter++;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => page.PageNumber)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Strana br. " + counter.ToString(), "GetPdf", "Documents", new { id = page.PageId }, new { target = "_blank" })
+                        </td>
+                        <td></td>
+                        <td>
+                            <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Pages", new{@id=page.PageId} )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+                            <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "Pages", new{@id=page.DocumentId} )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+                        </td>
+                    </tr>
+                }
+
+            }
+            else
+            {
+                <tr><td>Dokument je prazan</td></tr>
+            }
+
+        </table>
+    </div>
+</body>

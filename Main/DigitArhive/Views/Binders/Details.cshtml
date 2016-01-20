@@ -1,0 +1,191 @@
+﻿@model DigitArchive.Models.Binder
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalji</h2>
+<p>
+    <button class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Binders", new { @id = Model.BinderId } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button>
+    <button class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Company", new { id = Model.CompanyId } )'"><i class="glyphicon glyphicon-arrow-left"></i> Nazad na listu</button>
+    <button class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Create", "Documents", new { @id = Model.BinderId } )'"><i class="glyphicon glyphicon-plus"></i> Dodaj novi dokument</button>
+</p>
+<input type="text" id="searchBar" />
+<button style='width: 100px' class='btn btn-mini btn-info' data-placement='top' rel='tooltip' onclick="SearchCompany()"><i class="glyphicon glyphicon-search"></i> Pretraži</button>
+
+<body>
+    <div>
+        <h4>Registrator</h4>
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Company.CompanyName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Company.CompanyName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Year)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Year)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Location)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Location)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BarCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BarCode)
+            </dd>
+        </dl>
+
+        <table class="table hidden" id="documentTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Opis dokumenta")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Datum kreiranja")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Porijeklo dokumenta")
+                    </th>
+                    <th>Akcije</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        <table class="table" id="originalTable">
+            <tr>
+                @*<th>
+                    Tip dokumenta
+                </th>*@
+                <th>
+                    Opis dokumenta
+                </th>
+                <th>
+                    Datum kreiranja
+                </th>
+                <th>
+                    Porijeklo dokumenta
+                </th>
+                <th>Akcije</th>
+            </tr>
+
+            @foreach (var document in Model.Documents)
+            {
+                <tr>
+                    @*<td>
+                        @Html.DisplayFor(model => document.DocumentType.DocumentTypeName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(model => document.DocumentDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => document.DocumentCreationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => document.CompanyFromDocument)
+                    </td>
+                    <td>
+                        <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "Documents", new{@id=document.DocumentId} )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+                        <p><button style="width: 100px" class="btn btn-mini btn-success" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Details", "Documents", new{@id=document.DocumentId} )'"><i class="glyphicon glyphicon-list"></i> Detalji</button></p>
+                        <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "Documents", new{@id=document.DocumentId} )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>    
+</body>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var searchBarEnterKey = document.getElementById("searchBar");
+        searchBarEnterKey.addEventListener("keydown", function (e) {
+            if (e.keyCode === 13) {
+                SearchDocument();
+            }
+        });
+
+    function SearchDocument() {
+
+        var textbox = document.getElementById("searchBar").value;
+        var data = encodeURIComponent(textbox);
+        var url = "/Binders/SearchDocument";
+        var companyId = @Model.BinderId;
+
+            $.ajax({
+
+                method:"get",
+                data: data,
+                url: url + "?binderId=" + companyId +"&description="+ data
+
+            }).success(function (response) {
+                console.log("Success");
+                console.log(response);
+
+                var table = $('#documentTable');
+                var tBody = table.children('tbody');
+                tBody.html("");
+                var textbox = document.getElementById("searchBar");
+                textbox.value = "";
+
+                if(response.length!=0){
+                for(var i=0; i<response.length; i++){
+                    tBody.append(
+                    "<tr><td>"  +response[i].Description + "</td><td>" +
+                                response[i].CreationDate + "</td><td>" +
+                                response[i].DocumentOrigin + "</td><td>" +
+
+                           "<p><button style='width: 100px' class='btn btn-mini btn-danger' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Edit", "Documents"))?id=" + response[i].DocumentId + "'\"> <i class='glyphicon glyphicon-edit'></i> Izmjeni</button></p>" +
+                           "<p><button style='width: 100px' class='btn btn-mini btn-success' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Details", "Documents"))?id=" + response[i].DocumentId + "'\"><i class='glyphicon glyphicon-list'></i> Detalji</button></p>" +
+                           "<p><button style='width: 100px' class='btn btn-mini btn-default' data-placement='top' rel='tooltip' onclick=\"location.href='@(Url.Action("Delete", "Documents"))?id=" + response[i].DocumentId + "'\"><i class='glyphicon glyphicon-trash'></i> Obriši</button></p>" +
+                           "</td></tr>"
+                    );
+                }
+                table.removeClass("hidden");
+                var originalTable = $('#originalTable');
+                originalTable.remove();
+                
+                }
+
+                else{
+                    alert("Nema dokumenta sa traženim imenom.");
+                }
+
+
+            }).error(function (response) {
+                console.log("Error");
+                console.log(response);
+                var textbox = document.getElementById("searchBar");
+                textbox.value = "";
+                alert("Nema dokumenta sa traženim imenom.");
+            });
+        }
+    </script>
+}

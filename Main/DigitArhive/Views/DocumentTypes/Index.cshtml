@@ -1,0 +1,32 @@
+﻿@model IEnumerable<DigitArchive.Models.DocumentType>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Tipovi dokumenata</h2>
+
+<p>
+    <button class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Create", "DocumentTypes" )'"><i class="glyphicon glyphicon-plus"></i> Dodaj novi</button>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentTypeName)
+        </th>
+        <th>Akcija</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DocumentTypeName)
+        </td>
+        <td>
+            <p><button style="width: 100px" class="btn btn-mini btn-danger" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Edit", "DocumentTypes", new{ id = item.DocumantTypeId } )'"><i class="glyphicon glyphicon-edit"></i> Izmjeni</button></p>
+            <p><button style="width: 100px" class="btn btn-mini btn-default" data-placement="top" rel="tooltip" onclick="location.href='@Url.Action("Delete", "DocumentTypes", new { id = item.DocumantTypeId } )'"><i class="glyphicon glyphicon-trash"></i> Obriši</button></p>
+        </td>
+    </tr>
+}
+
+</table>

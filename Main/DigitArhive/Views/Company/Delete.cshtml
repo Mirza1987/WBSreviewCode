@@ -1,0 +1,56 @@
+﻿@model DigitArchive.Models.Company
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Obriši</h2>
+
+<h3>Da li ste sigurni da želite pobrisati ovaj tip firmu?</h3>
+<div>
+    <h4>Company</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyIdNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyIdNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyTaxNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyTaxNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyStatus)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Briši" class="btn btn-default" /> |
+            @Html.ActionLink("Nazad na listu", "Index")
+        </div>
+    }
+</div>

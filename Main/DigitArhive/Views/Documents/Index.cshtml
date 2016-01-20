@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DigitArchive.Models.Document>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Dokumenti</h2>
+
+<p>
+    @*@Html.ActionLink("Dodaj novi", "Create")*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Binder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocumentCreationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyFromDocument)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Binder.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Company.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentType.DocumentTypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeStamp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocumentCreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyFromDocument)
+            </td>
+            <td>
+                @Html.ActionLink("Uredi", "Edit", new { id = item.DocumentId }) |
+                @Html.ActionLink("Detalji", "Details", new { id = item.DocumentId }) |
+                @Html.ActionLink("Obriši", "Delete", new { id = item.DocumentId })
+            </td>
+        </tr>
+    }
+
+</table>

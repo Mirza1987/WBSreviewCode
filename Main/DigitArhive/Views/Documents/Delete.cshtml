@@ -1,0 +1,80 @@
+﻿@model DigitArchive.Models.Document
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Obriši</h2>
+
+<h3>Da li ste sigurni da želite pobrisati ovaj dokument?</h3>
+<div>
+    <h4>Dokument</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Binder.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Binder.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Company.CompanyName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Company.CompanyName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentType.DocumentTypeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentType.DocumentTypeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeStamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentCreationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentCreationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyFromDocument)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyFromDocument)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Briši" class="btn btn-default" /> |
+            @Html.ActionLink("Nazad na listu", "Index")
+        </div>
+    }
+</div>
